@@ -12,8 +12,10 @@ interface Video {
 
 export default function VotePage() {
     const [videos, setVideos] = useState<Video[]>([
-        { id: 1, title: '安平靈糧堂20週年感恩禮拜', youtube_id: 'CRKeQXpDu1k' },
-        { id: 2, title: '安平靈糧堂20週年紀念影片', youtube_id: 'yDc0_8emz7M' }
+        { id: 1, title: '20週年紀念影片 1', youtube_id: '9_qNJyZR3sI' },
+        { id: 2, title: '20週年紀念影片 2', youtube_id: 'g7sZsHg05kw' },
+        { id: 3, title: '20週年紀念影片 3', youtube_id: 'C6rLXGCrejg' },
+        { id: 4, title: '20週年紀念影片 4', youtube_id: 'Qc7sxKQgfLo' }
     ]);
     const [voteStats, setVoteStats] = useState<any[]>([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
