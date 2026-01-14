@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import VideoCard from '@/components/VideoCard';
 import Leaderboard from '@/components/Leaderboard';
-import { getVoteStats } from '../actions/vote';
+import { getVoteStats, getRemainingVotes } from '../actions/vote';
 
 interface Video {
     id: number;
@@ -26,11 +26,18 @@ export default function VotePage() {
     const [inputName, setInputName] = useState('');
     const [inputPhone, setInputPhone] = useState('');
     const [loading, setLoading] = useState(true);
+    const [remainingVotes, setRemainingVotes] = useState(3);
 
     useEffect(() => {
         checkLoginStatus();
         loadVoteStats();
     }, []);
+
+    useEffect(() => {
+        if (isLoggedIn && userPhone) {
+            loadRemainingVotes();
+        }
+    }, [isLoggedIn, userPhone]);
 
     const checkLoginStatus = () => {
         const storedName = localStorage.getItem('user_name');
@@ -47,6 +54,12 @@ export default function VotePage() {
     const loadVoteStats = async () => {
         const stats = await getVoteStats();
         setVoteStats(stats);
+    };
+
+    const loadRemainingVotes = async () => {
+        if (!userPhone) return;
+        const result = await getRemainingVotes(userPhone);
+        setRemainingVotes(result.remaining);
     };
 
     const handleLogin = () => {
@@ -217,6 +230,14 @@ export default function VotePage() {
                                     <i className="fas fa-phone text-gray-500 mr-1"></i>
                                     {userPhone}
                                 </div>
+                                <div className="text-sm mt-2">
+                                    <i className="fas fa-ticket-alt text-gold mr-1"></i>
+                                    今日剩餘票數：
+                                    <span className={`font-bold ml-1 ${remainingVotes > 0 ? 'text-gold' : 'text-red-500'}`}>
+                                        {remainingVotes}
+                                    </span>
+                                    <span className="text-gray-500"> / 3</span>
+                                </div>
                             </div>
                             <button
                                 onClick={handleLogout}
@@ -239,7 +260,10 @@ export default function VotePage() {
                             key={video.id}
                             video={video}
                             isLoggedIn={isLoggedIn}
-                            onVoteSuccess={loadVoteStats}
+                            onVoteSuccess={() => {
+                                loadVoteStats();
+                                loadRemainingVotes();
+                            }}
                         />
                     ))}
                 </div>

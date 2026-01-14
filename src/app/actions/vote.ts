@@ -12,30 +12,48 @@ export async function submitVote(videoId: number) {
             return { success: false, message: '請先登入！' };
         }
 
-        // 檢查是否已投過票
-        const { data: existingVotes, error: checkError } = await supabase
+        // 取得今天的日期（台灣時區）
+        const today = new Date().toLocaleDateString('en-CA', {
+            timeZone: 'Asia/Taipei'
+        }); // 格式: YYYY-MM-DD
+
+        // 檢查今天已投票數
+        const { data: todayVotes, error: checkError } = await supabase
             .from('votes')
             .select('*')
             .eq('user_id', userId)
-            .eq('video_id', videoId);
+            .eq('vote_date', today);
 
         if (checkError) {
             console.error('檢查投票錯誤:', checkError);
             return { success: false, message: '檢查投票狀態時發生錯誤' };
         }
 
-        if (existingVotes && existingVotes.length > 0) {
-            return { success: false, message: '您已經投過這個影片了！' };
+        // 檢查是否超過每日限制（3票）
+        if (todayVotes && todayVotes.length >= 3) {
+            return {
+                success: false,
+                message: '今天的投票次數已用完！明天再來投票吧 🗳️'
+            };
         }
 
-        // 新增投票記錄
+        // 新增投票記錄（包含 vote_date）
         const { error } = await supabase
             .from('votes')
-            .insert({ user_id: userId, video_id: videoId });
+            .insert({
+                user_id: userId,
+                video_id: videoId,
+                vote_date: today
+            });
 
         if (error) throw error;
 
-        return { success: true, message: '投票成功！' };
+        const remaining = 3 - (todayVotes?.length || 0) - 1;
+        return {
+            success: true,
+            message: `投票成功！今日還剩 ${remaining} 票`,
+            remainingVotes: remaining
+        };
     } catch (error) {
         console.error('投票錯誤:', error);
         return { success: false, message: '投票失敗，請稍後再試' };
@@ -70,5 +88,37 @@ export async function getVoteStats() {
     } catch (error) {
         console.error('獲取投票統計錯誤:', error);
         return [];
+    }
+}
+
+export async function getRemainingVotes(userId: string) {
+    try {
+        // 取得今天的日期（台灣時區）
+        const today = new Date().toLocaleDateString('en-CA', {
+            timeZone: 'Asia/Taipei'
+        }); // 格式: YYYY-MM-DD
+
+        // 查詢今天的投票記錄
+        const { data, error } = await supabase
+            .from('votes')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('vote_date', today);
+
+        if (error) throw error;
+
+        const votedCount = data?.length || 0;
+        return {
+            remaining: 3 - votedCount,
+            voted: votedCount,
+            total: 3
+        };
+    } catch (error) {
+        console.error('獲取剩餘票數錯誤:', error);
+        return {
+            remaining: 0,
+            voted: 0,
+            total: 3
+        };
     }
 }
