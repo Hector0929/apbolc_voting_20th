@@ -136,15 +136,8 @@ export default function VotePage() {
     return (
         <div className="min-h-screen bg-[#1a1a1a] py-12 px-4">
             <div className="max-w-7xl mx-auto">
-                {/* Header with Back Button */}
-                <header className="text-center mb-12 relative">
-                    <a
-                        href="/20th.html"
-                        className="absolute left-0 top-0 flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md border border-[#be9e69]/30 rounded-xl text-gray-300 hover:text-[#be9e69] hover:border-[#be9e69] transition-all duration-300 group"
-                    >
-                        <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-                        <span className="hidden md:inline">返回首頁</span>
-                    </a>
+                {/* Header */}
+                <header className="text-center mb-12">
                     <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-[#be9e69] via-[#d4af7a] to-[#be9e69] bg-clip-text text-transparent">
                         🎉 安平靈糧堂20週年
                     </h1>
