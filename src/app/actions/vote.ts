@@ -13,14 +13,18 @@ export async function submitVote(videoId: number) {
         }
 
         // 檢查是否已投過票
-        const { data: existingVote } = await supabase
+        const { data: existingVotes, error: checkError } = await supabase
             .from('votes')
             .select('*')
             .eq('user_id', userId)
-            .eq('video_id', videoId)
-            .single();
+            .eq('video_id', videoId);
 
-        if (existingVote) {
+        if (checkError) {
+            console.error('檢查投票錯誤:', checkError);
+            return { success: false, message: '檢查投票狀態時發生錯誤' };
+        }
+
+        if (existingVotes && existingVotes.length > 0) {
             return { success: false, message: '您已經投過這個影片了！' };
         }
 
