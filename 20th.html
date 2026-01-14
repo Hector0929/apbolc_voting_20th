@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安平靈糧堂 20週年神蹟之旅 | ALL Airlines</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <!-- Gemini API Import -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+
+    <style>
+        :root {
+            --starlux-gold: #be9e69;
+            --starlux-brown: #4a3b32;
+            --starlux-dark: #1a1a1a;
+            --starlux-grey: #2d2d2d;
+            --highlight-red: #8b1c1c;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--starlux-dark);
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .text-gold {
+            color: var(--starlux-gold);
+        }
+
+        .bg-gold {
+            background-color: var(--starlux-gold);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--starlux-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--starlux-gold);
+            border-radius: 4px;
+        }
+
+        /* Animations */
+        @keyframes drift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .animate-drift {
+            background-size: 200% 200%;
+            animation: drift 20s ease infinite;
+        }
+
+        .window-frame {
+            background: linear-gradient(135deg, #e0e0e0 0%, #a0a0a0 100%);
+            border-radius: 40% 40% 40% 40% / 60% 60% 40% 40%;
+            box-shadow: inset 10px 10px 20px rgba(0, 0, 0, 0.5),
+                5px 5px 15px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.5s ease;
+        }
+
+        .window-frame:hover {
+            transform: scale(1.02);
+        }
+
+        .flight-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--starlux-gold), transparent);
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            background-color: var(--starlux-gold);
+            border-radius: 50%;
+            border: 4px solid var(--starlux-dark);
+            box-shadow: 0 0 0 2px var(--starlux-gold);
+            z-index: 10;
+        }
+
+        /* Screen Glitch Effect for Turbulence */
+        .glitch-effect {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: red;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0)
+            }
+
+            20% {
+                transform: translate(-2px, 2px)
+            }
+
+            40% {
+                transform: translate(-2px, -2px)
+            }
+
+            60% {
+                transform: translate(2px, 2px)
+            }
+
+            80% {
+                transform: translate(2px, -2px)
+            }
+
+            100% {
+                transform: translate(0)
+            }
+        }
+
+        /* Section Transitions */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            visibility: hidden;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+            visibility: visible;
+        }
+
+        .menu-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(190, 158, 105, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .menu-card:hover {
+            border-color: var(--starlux-gold);
+            background: rgba(190, 158, 105, 0.1);
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--starlux-dark);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease-out;
+        }
+
+        /* Chat Bot UI */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--starlux-gold);
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(190, 158, 105, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--starlux-gold);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .chat-window.open {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .chat-header {
+            background: linear-gradient(to right, #1a1a1a, #2d2d2d);
+            padding: 15px;
+            border-bottom: 1px solid var(--starlux-gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            gap: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .message.user {
+            background: var(--starlux-gold);
+            color: black;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .message.bot {
+            background: #333;
+            color: white;
+            border: 1px solid #444;
+            align-self: flex-start;
+        }
+
+        /* Turbulence Analyzer Styles */
+        .turbulence-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #8b1c1c;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .turbulence-result {
+            background: rgba(139, 28, 28, 0.1);
+            border-left: 4px solid var(--starlux-gold);
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+            text-align: left;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Loading / Check-in Screen -->
+    <div id="loading-screen">
+        <div class="text-center px-4">
+            <div class="mb-6">
+                <!-- Reverted Logo to the 'Bigger' version (User provided GitHub Raw URL - Update 2) -->
+                <a href="/vote" class="inline-block cursor-pointer">
+                    <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/154414fbd790161edd0c0028885427972d088e4c/%E6%9C%AA%E5%91%BD%E5%90%8D%E8%A8%AD%E8%A8%88%20(2).png"
+                        alt="安平靈糧堂航空 APBOLC Airlines"
+                        class="w-64 md:w-80 mx-auto mb-4 object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500">
+                </a>
+                <!-- Modified: Times New Roman + Italic + Taller (ScaleY) for "Thin/Long" look -->
+                <p class="text-gold uppercase tracking-[0.3em] text-sm mt-2 origin-center"
+                    style="font-family: 'Times New Roman', serif; font-style: italic; font-weight: lighter; transform: scaleY(1.15);">
+                    Anping Ling Liang 20th Anniversary</p>
+                <!-- Removed the extra <h2> title as requested -->
+            </div>
+
+            <div class="space-y-6">
+                <div class="flex items-center justify-center gap-4 text-gray-400 text-sm">
+                    <span><i class="fas fa-chair"></i> 座位已確認</span>
+                    <span><i class="fas fa-mobile-alt"></i> 飛航模式 ON</span>
+                    <span><i class="fas fa-plane"></i> 航班號 777</span>
+                </div>
+
+                <!-- Restored Clickable Ticket Image (Removed Button) -->
+                <div class="relative cursor-pointer group perspective-1000" onclick="startJourney()">
+                    <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/69f22ba39e7a65419e41943372683beae488e594/tickets.png"
+                        alt="Boarding Pass Check-in"
+                        class="w-full max-w-xl mx-auto rounded-lg shadow-[0_0_30px_rgba(190,158,105,0.3)] 
+                                transform transition-all duration-500 group-hover:scale-105 group-hover:-rotate-1 group-hover:shadow-[0_0_50px_rgba(190,158,105,0.6)]">
+
+                    <!-- Touch/Click Hint -->
+                    <div
+                        class="mt-4 flex items-center justify-center gap-2 text-gold text-sm font-bold tracking-widest animate-pulse">
+                        <i class="fas fa-hand-pointer"></i>
+                        <span>請點擊機票登機 (TAP TICKET TO BOARD)</span>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-8 text-xs text-gray-500">System Initializing... Connecting to 2001-2026</p>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="fixed w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <!-- Replaced Text Title with Navbar Logo Image -->
+                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/1dee8bb16361871ebaab4aaf3b60d186f9231098/logo%E6%A9%AB%E5%BC%8F.png"
+                    alt="ALL AIRLINES Logo" class="h-10 md:h-12 w-auto object-contain">
+            </div>
+            <div class="hidden md:flex gap-8 text-xs tracking-widest uppercase text-gray-400">
+                <span class="text-gold"><i class="fas fa-plane-departure mr-2"></i>TNN (安平)</span>
+                <div class="w-16 h-[1px] bg-gray-600 my-auto"></div>
+                <span class="text-gold">FGL (榮耀) <i class="fas fa-plane-arrival ml-2"></i></span>
+            </div>
+            <div class="text-sm font-light text-gold">
+                FLT 777 <span class="mx-2">|</span> 20th ANNIV.
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Wrapper -->
+    <main class="relative pt-20">
+
+        <!-- Hero: The Runway -->
+        <section class="h-screen relative flex items-center justify-center overflow-hidden">
+            <!-- Background Video/Image Placeholder -->
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                    alt="Sky" class="w-full h-full object-cover opacity-40">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a1a1a]/80 to-[#1a1a1a]"></div>
+            </div>
+
+            <div class="container mx-auto px-6 relative z-10 text-center">
+                <!-- Logo Placement (Modified) Reverted to the 'Bigger' version -->
+                <div class="mb-8 flex justify-center">
+                    <a href="/vote" class="inline-block cursor-pointer">
+                        <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/154414fbd790161edd0c0028885427972d088e4c/%E6%9C%AA%E5%91%BD%E5%90%8D%E8%A8%AD%E8%A8%88%20(2).png"
+                            alt="安平靈糧堂航空 Logo"
+                            class="h-24 md:h-32 object-contain drop-shadow-[0_0_15px_rgba(190,158,105,0.6)] hover:scale-105 transition-transform duration-500">
+                    </a>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl font-serif font-bold text-white mb-6 leading-tight">
+                    歡迎搭乘<br><span class="text-gold">20週年神蹟之旅</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    <!-- Removed trailing periods -->
+                    各位旅客您好，我是機艙長 羅士硯<br>本班機波音77號即將從華平路起飛，前往府平路77號
+                    <br><span class="text-sm text-gray-500 mt-2 block">飛行時間：20年 (2006-2026)</span>
+                </p>
+                <div
+                    class="flex flex-col md:flex-row justify-center gap-4 text-xs tracking-widest uppercase text-gray-400">
+                    <div class="flex items-center gap-2">
+                        <!-- Modified Temperature Text -->
+                        <i class="fas fa-temperature-high text-gold"></i> 溫度: 熱情-喜樂-盼望
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <!-- Modified Altitude Text to New Vision -->
+                        <i class="fas fa-tachometer-alt text-gold"></i> 高度: 彰顯神全備豐盛榮耀教會
+                    </div>
+                </div>
+
+                <!-- Scroll Indicator -->
+                <!-- Adjusted position from bottom-10 to bottom-4 to avoid blocking text -->
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 animate-bounce">
+                    <i class="fas fa-chevron-down text-gold text-2xl"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: The Timeline (Flight Path) -->
+        <section class="py-24 relative bg-[#1a1a1a]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 fade-in-section">
+                    <h2 class="text-3xl font-serif text-white mb-2">飛行航線圖</h2>
+                    <p class="text-gold tracking-widest text-sm uppercase">Flight History & Milestones</p>
+                </div>
+
+                <!-- Timeline Container -->
+                <div class="relative max-w-4xl mx-auto" id="timeline-container">
+                    <!-- Central Flight Line -->
+                    <div class="flight-line"></div>
+
+                    <!-- NEW: Timeline Plane Indicator -->
+                    <!-- Added 'w-12 h-12 flex items-center justify-center' to create a fixed square box for perfect centering -->
+                    <!-- Keeps 'left-1/2' and 'translateX(-50%)' to align the center of the box with the line -->
+                    <!-- Rotation and Margin settings preserved -->
+                    <div id="timeline-plane"
+                        class="absolute left-1/2 w-12 h-12 flex items-center justify-center text-gold text-3xl z-20 drop-shadow-[0_0_8px_rgba(190,158,105,1)] transition-all duration-300 ease-out will-change-transform pointer-events-none"
+                        style="top: 0; transform: translateX(-50%) rotate(90deg); margin-top: -35px;">
+                        <i class="fas fa-plane"></i>
+                    </div>
+
+                    <!-- 2001 (Fixed Layout) -->
+                    <div class="relative flex items-center justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-white">2001</h3>
+                            <p class="text-gold text-sm mb-2">河堤詩歌外展</p>
+                            <!-- Removed trailing period -->
+                            <p class="text-gray-400 text-sm">平安小組組成詩歌佈道團，在安平運河旁揭開序幕</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pl-8">
+                            <!-- Changed from h-64 to h-56 to match standard -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors">
+                                <!-- Added 'object-bottom' to focus on children (usually lower in frame) and crop top -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/97766ca8765db100173fcd06feca22f175c5e289/2001%E6%B2%B3%E5%A0%A4%E4%BD%88%E9%81%93.png"
+                                    class="w-full h-full object-cover object-bottom opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2001河堤佈道">
+                                <div class="absolute bottom-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    安平運河 (2001)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2006 (Updated Text: Church Founding History Correction) -->
+                    <div
+                        class="relative flex items-center flex-row-reverse justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-left pl-8">
+                            <h3 class="text-2xl font-bold text-white">2006</h3>
+                            <p class="text-gold text-sm mb-2">正式開拓</p>
+                            <!-- Corrected description text: Removed duplicated growth text -->
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                陳學明傳道在台南靈糧堂母堂張庭禎牧師的祝福差派下，於華平路420號正式開拓安平靈糧堂
+                            </p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pr-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/4a7180f32ab13d55dbfa02b7df2072dec6c073fb/IMG_0870.JPG"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2006 信心腳蹤">
+                                <div class="absolute bottom-2 right-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2006 修車廠開拓</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2007 (Updated with 2007.JPG and moved text) -->
+                    <div class="relative flex items-center justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-white">2007</h3>
+                            <p class="text-gold text-sm mb-2">信心扎根</p>
+                            <!-- Updated text as requested -->
+                            <p class="text-gray-400 text-sm">
+                                人數即突破百人，展現了神恩典同行的熱情！
+                            </p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pl-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/d829cd17ca8f92df508cc8354dd2041e591efb59/2007.JPG"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2007 信心扎根">
+                                <div class="absolute bottom-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2007 紀錄</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 2008 (Updated with User Image) -->
+                    <div
+                        class="relative flex items-center flex-row-reverse justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-left pl-8">
+                            <h3 class="text-2xl font-bold text-white">2008</h3>
+                            <p class="text-gold text-sm mb-2">團隊建造</p>
+                            <!-- Updated description text -->
+                            <p class="text-gray-400 text-sm">進入事奉倍增、生命倍增年</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pr-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/01fc77be5f67134d6d88305063206a53b8ad11fe/2008.JPG"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2008 團隊建造">
+                                <div class="absolute bottom-2 right-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2008 紀錄</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2009 (Updated with User Image) -->
+                    <div class="relative flex items-center justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-white">2009</h3>
+                            <p class="text-gold text-sm mb-2">裝備領袖</p>
+                            <!-- Removed trailing period -->
+                            <p class="text-gray-400 text-sm">培育新一代領袖，傳承異象</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pl-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/54dd7646c55a6a02f904566e0b34c3506cb88436/2009%2012%2026%20%E6%96%BD%E6%B4%97%E6%97%A5%20(141).JPG"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2009 裝備領袖">
+                                <div class="absolute bottom-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2009 紀錄</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2010 (Updated with Ordination Text) -->
+                    <div
+                        class="relative flex items-center flex-row-reverse justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-left pl-8">
+                            <h3 class="text-2xl font-bold text-white">2010</h3>
+                            <!-- Updated Subheader -->
+                            <p class="text-gold text-sm mb-2">按牧典禮</p>
+                            <!-- Updated Description Text -->
+                            <p class="text-gray-400 text-sm">陳學明牧師 正式按牧典禮</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pr-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <!-- Added 'object-top' to ensure heads are not cropped out -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/74b2e8cc76e6b135f00a5a6ff0eeeb9f63e69386/2010-01-30%E6%8C%89%E7%89%A7%E7%A6%AE%E6%8B%9C%20150.jpg"
+                                    class="w-full h-full object-cover object-top opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2010 按牧禮拜">
+                                <div class="absolute bottom-2 right-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2010 紀錄</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 2011 (Updated Title and Text as requested, now with Image) -->
+                    <div class="relative flex items-center justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-white">2011</h3>
+                            <!-- Updated Title -->
+                            <p class="text-gold text-sm mb-2">宣教啟航</p>
+                            <!-- Updated Description -->
+                            <p class="text-gray-400 text-sm">跨海宣教，合一事奉</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pl-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Moved Image here from 2013 -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/57b2ee7cd019091d8504df589b003bee90474a70/%E7%9F%AD%E5%AE%A3.JPG"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2011 短宣">
+                                <div class="absolute bottom-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2011 短宣</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2012 (Updated with User Image: Tainan City Altar) -->
+                    <div
+                        class="relative flex items-center flex-row-reverse justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-left pl-8">
+                            <h3 class="text-2xl font-bold text-white">2012</h3>
+                            <p class="text-gold text-sm mb-2">轉化城市</p>
+                            <!-- Removed trailing period -->
+                            <p class="text-gray-400 text-sm">為城市禱告，帶來屬靈轉化</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pr-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/188407f2556041c990e71d5b9cd7498bf38bd7c6/%E5%8F%B0%E5%8D%97%E5%9F%8E%E5%B8%82%E7%A5%AD%E5%A3%87.JPG"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2012 台南城市祭壇">
+                                <div class="absolute bottom-2 right-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2012 城市祭壇</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2013 (Swapped with 2014 Content: Wedding Marathon) -->
+                    <div class="relative flex items-center justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-white">2013</h3>
+                            <!-- Swapped Title -->
+                            <p class="text-gold text-sm mb-2">建立家室</p>
+                            <!-- Swapped Description -->
+                            <p class="text-gray-400 text-sm">婚禮馬拉松</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pl-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Swapped Image (Moved from 2014) -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/ef39799e7f02125d461dc82ad2332b4cd7351318/IMG_5562.JPG"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2013 婚禮馬拉松">
+                                <div class="absolute bottom-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2013 婚禮馬拉松</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2014 (Swapped with 2013 Content: Mission Handover) -->
+                    <div
+                        class="relative flex items-center flex-row-reverse justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-left pl-8">
+                            <h3 class="text-2xl font-bold text-white">2014</h3>
+                            <!-- Swapped Title -->
+                            <p class="text-gold text-sm mb-2">承接使命</p>
+                            <!-- Swapped Description -->
+                            <p class="text-gray-400 text-sm">傳承屬靈產業，興起下一代領袖</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pr-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <!-- Kept object-bottom to prioritize children's faces/bodies in the lower frame -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/a1d4e3809bf982552935139147d6855d67473dfe/2014.JPG"
+                                    class="w-full h-full object-cover object-bottom opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2014 承接使命">
+                                <div class="absolute bottom-2 right-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2014 承接使命</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 2015 (Updated with User Image: 2015安南.jpg) -->
+                    <div class="relative flex items-center justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-white">2015</h3>
+                            <p class="text-gold text-sm mb-2">分植安南福音中心</p>
+                            <!-- Updated text as requested -->
+                            <p class="text-gray-400 text-sm">差派蕭夢熊傳道開拓安南福音中心</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pl-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/6ebbd09a7cbccc81b623515401fab5bd8a5c1c0b/2015%E5%AE%89%E5%8D%97.jpg"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2015 安南福音中心">
+                                <div class="absolute bottom-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2015 安南福音中心</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2018-2021 Building (Reverted to: 建堂工程.jpg) -->
+                    <div
+                        class="relative flex items-center flex-row-reverse justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-left pl-8">
+                            <h3 class="text-2xl font-bold text-white">2018 - 2021</h3>
+                            <p class="text-gold text-sm mb-2">建堂工程與新堂啟用</p>
+                            <ul class="text-gray-400 text-sm space-y-1">
+                                <li>• 2018 開工禮拜</li>
+                                <li>• 2019 搬離華平路</li>
+                                <!-- Updated text as requested -->
+                                <li>• 2021 府平路77號 獻堂禮拜正式啟用</li>
+                                <!-- Added Pastor Xiao Ordination -->
+                                <li>• 2021 11月 蕭夢熊傳道按立牧師</li>
+                            </ul>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pr-8">
+                            <!-- Changed from h-40 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors">
+                                <!-- Reverted Image to '建堂工程.jpg' -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/94e33c6d9974c5b5ae2b4b305975587d3cdb72b9/%E5%BB%BA%E5%A0%82%E5%B7%A5%E7%A8%8B.jpg"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="建堂工程">
+                                <div class="absolute bottom-2 right-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    建堂工程</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 2022 (Updated with User Image) -->
+                    <div class="relative flex items-center justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-white">2022</h3>
+                            <p class="text-gold text-sm mb-2">新堂新氣象</p>
+                            <!-- Removed trailing period -->
+                            <p class="text-gray-400 text-sm">適應新環境，開展各項事工，讓家更溫暖</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pl-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder with User Image -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/017de762e2c62fea2eec583b58b0e3beab191c6a/2022.jpg"
+                                    class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2022 新堂新氣象">
+                                <div class="absolute bottom-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2022 新堂新氣象</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2023 (Updated with User Image: 走路社區.jpg) -->
+                    <div
+                        class="relative flex items-center flex-row-reverse justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-left pl-8">
+                            <h3 class="text-2xl font-bold text-white">2023</h3>
+                            <p class="text-gold text-sm mb-2">擴張帳幕</p>
+                            <!-- Removed trailing period -->
+                            <p class="text-gray-400 text-sm">走出圍牆，深入社區，恢復實體連結</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pr-8">
+                            <!-- Kept h-56 (already matched) -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <!-- Changed to object-center to balance top/bottom cropping -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/2a17065e4f79766abfe90c5b8596a21214771825/%E8%B5%B0%E8%B7%AF%E7%A4%BE%E5%8D%80.jpg"
+                                    class="w-full h-full object-cover object-center opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2023 走入社區">
+                                <div class="absolute bottom-2 right-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2023 擴張帳幕</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2024 (Updated with User Image: 2024.jpg) -->
+                    <div class="relative flex items-center justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-2xl font-bold text-white">2024</h3>
+                            <p class="text-gold text-sm mb-2">世代同行</p>
+                            <!-- Removed trailing period -->
+                            <p class="text-gray-400 text-sm">興起下一代，兩代合一，傳承屬靈產業</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot group-hover:scale-125 transition-transform">
+                        </div>
+                        <div class="w-5/12 pl-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <!-- Replaced Placeholder Icon with User Image -->
+                                <img src="https://raw.githubusercontent.com/apbolcoec/dorothy/f88d5dee212dd23f264bdb369ab175a8437098ec/2024.jpg"
+                                    class="w-full h-full object-cover object-center opacity-80 hover:opacity-100 transition-opacity"
+                                    alt="2024 世代同行">
+                                <div class="absolute bottom-2 left-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    2024 世代同行</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2025 -->
+                    <div
+                        class="relative flex items-center flex-row-reverse justify-between mb-12 fade-in-section group">
+                        <div class="w-5/12 text-left pl-8">
+                            <h3 class="text-2xl font-bold text-white">2025</h3>
+                            <p class="text-gold text-sm mb-2">豐盛榮耀</p>
+                            <!-- Removed trailing period -->
+                            <p class="text-gray-400 text-sm">迎接雙倍豐收，榮耀就此展開</p>
+                        </div>
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)] border-white">
+                        </div>
+                        <div class="w-5/12 pr-8">
+                            <!-- Changed from h-32 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 relative group-hover:border-gold transition-colors flex items-center justify-center">
+                                <i class="fas fa-camera text-3xl text-gray-600"></i>
+                                <div class="absolute bottom-2 right-2 text-xs bg-black/50 px-2 py-1 rounded text-white">
+                                    待上傳 (2025)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2026 Final Destination: Happy Birthday -->
+                    <div class="relative flex items-center justify-between mb-24 fade-in-section group">
+                        <div class="w-5/12 text-right pr-8">
+                            <h3 class="text-4xl font-serif font-bold text-gold mb-2">2026</h3>
+                            <p class="text-white text-xl font-bold mb-2">終點站：生日快樂</p>
+                            <p class="text-gray-300 text-sm">安平靈糧堂 20 歲生日快樂！<br>感謝神帶領我們飛越 20 年，神蹟之旅，未完待續...</p>
+                        </div>
+
+                        <!-- Special Destination Dot -->
+                        <div
+                            class="absolute left-1/2 transform -translate-x-1/2 timeline-dot bg-gold w-8 h-8 border-4 border-white shadow-[0_0_20px_rgba(190,158,105,1)] z-10 animate-pulse">
+                        </div>
+
+                        <div class="w-5/12 pl-8">
+                            <!-- Changed from h-48 to h-56 -->
+                            <div
+                                class="w-full h-56 bg-gray-800 rounded-lg overflow-hidden border-2 border-gold relative group-hover:border-white transition-colors flex items-center justify-center shadow-[0_0_30px_rgba(190,158,105,0.3)]">
+                                <!-- Celebration Image Placeholder -->
+                                <img src="https://images.unsplash.com/photo-1464349153912-6a443953eeca?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                                    class="w-full h-full object-cover opacity-90" alt="Birthday Celebration">
+                                <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/30">
+                                    <i class="fas fa-birthday-cake text-4xl text-white mb-2 drop-shadow-lg"></i>
+                                    <span class="text-white font-bold text-xl drop-shadow-md tracking-widest">HAPPY
+                                        20TH</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Navigators & Missions -->
+        <section class="py-24 bg-[#141414] border-t border-gray-800">
+            <div class="container mx-auto px-6">
+                <!-- Navigators -->
+                <div class="mb-20 fade-in-section">
+                    <h2 class="text-3xl font-serif text-white mb-2 text-center">領航員與生命地圖</h2>
+                    <p class="text-gold text-center tracking-widest text-sm uppercase mb-12">Special Navigators</p>
+
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        <div class="text-center p-4 border border-gray-800 hover:border-gold transition-colors rounded">
+                            <div
+                                class="w-16 h-16 mx-auto bg-gray-700 rounded-full mb-3 flex items-center justify-center">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <p class="text-white text-sm">張庭禎 牧師</p>
+                        </div>
+                        <div class="text-center p-4 border border-gray-800 hover:border-gold transition-colors rounded">
+                            <div
+                                class="w-16 h-16 mx-auto bg-gray-700 rounded-full mb-3 flex items-center justify-center">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <p class="text-white text-sm">靜蓉 牧師</p>
+                        </div>
+                        <div class="text-center p-4 border border-gray-800 hover:border-gold transition-colors rounded">
+                            <div
+                                class="w-16 h-16 mx-auto bg-gray-700 rounded-full mb-3 flex items-center justify-center">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <p class="text-white text-sm">學明 牧師</p>
+                        </div>
+                        <div class="text-center p-4 border border-gray-800 hover:border-gold transition-colors rounded">
+                            <div
+                                class="w-16 h-16 mx-auto bg-gray-700 rounded-full mb-3 flex items-center justify-center">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <p class="text-white text-sm">國名 牧師</p>
+                        </div>
+                        <div class="text-center p-4 border border-gray-800 hover:border-gold transition-colors rounded">
+                            <div
+                                class="w-16 h-16 mx-auto bg-gray-700 rounded-full mb-3 flex items-center justify-center">
+                                <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                            <p class="text-white text-sm">夢熊 牧師</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mission Map -->
+                <div class="fade-in-section">
+                    <h3
+                        class="text-2xl font-serif text-white mb-8 text-center border-b border-gray-800 pb-4 inline-block w-full">
+                        擴展航線 (Mission Trips)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                「我們的飛行足跡也擴展到了新的領域。短宣隊啟程，將愛帶往各地。」
+                            </p>
+                            <div class="space-y-4">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-gold font-bold w-16">國際</span>
+                                    <div class="flex gap-2 text-sm text-gray-400">
+                                        <span class="bg-gray-800 px-3 py-1 rounded">🇵🇭 菲律賓</span>
+                                        <span class="bg-gray-800 px-3 py-1 rounded">🇹🇭 泰北</span>
+                                        <span class="bg-gray-800 px-3 py-1 rounded">🇯🇵 日本</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-gold font-bold w-16">國內</span>
+                                    <div class="flex gap-2 text-sm text-gray-400 flex-wrap">
+                                        <span class="bg-gray-800 px-3 py-1 rounded">金門</span>
+                                        <span class="bg-gray-800 px-3 py-1 rounded">台東</span>
+                                        <span class="bg-gray-800 px-3 py-1 rounded">屏東</span>
+                                        <span class="bg-gray-800 px-3 py-1 rounded">桃園</span>
+                                        <span class="bg-gray-800 px-3 py-1 rounded">宜蘭</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative h-64 bg-gray-800/50 rounded-xl overflow-hidden border border-gray-700">
+                            <!-- Simple Map Visualization -->
+                            <div class="absolute inset-0 flex items-center justify-center text-gray-600">
+                                [地圖動畫顯示航線發散]
+                            </div>
+                            <!-- Ping Animations -->
+                            <span class="absolute top-1/2 left-1/2 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: In-Flight Entertainment (Cruising Altitude) -->
+        <section class="py-24 bg-gradient-to-b from-[#1a1a1a] to-[#0f0f0f] relative overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gold opacity-5 rounded-full blur-3xl"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="flex justify-between items-end mb-12 fade-in-section">
+                    <div>
+                        <p class="text-gold text-xs uppercase tracking-widest mb-2"><i
+                                class="fas fa-wifi mr-2"></i>GALACTIC ENTERTAINMENT</p>
+                        <h2 class="text-4xl font-serif text-white">機上娛樂系統</h2>
+                    </div>
+                    <div class="text-right hidden md:block">
+                        <p class="text-gray-500 text-sm">Cruising Altitude Reached</p>
+                        <p class="text-white text-xl">35,000 ft</p>
+                    </div>
+                </div>
+
+                <!-- Menu Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in-section">
+                    <!-- Featured Events -->
+                    <div
+                        class="col-span-1 md:col-span-2 row-span-2 menu-card rounded-xl p-6 relative overflow-hidden group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                            class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-50 transition-opacity"
+                            alt="Concert">
+                        <div class="relative z-10 h-full flex flex-col justify-end">
+                            <span
+                                class="bg-red-900 text-white text-xs px-2 py-1 inline-block w-fit rounded mb-2">LIVE</span>
+                            <h3 class="text-2xl font-bold text-white mb-1">精選活動 (Featured)</h3>
+                            <p class="text-gray-300 text-sm">3月約書亞巡迴 | 4月藝起發光 | 10月盛曉玫</p>
+                            <p class="text-gold text-xs mt-2"><i class="fas fa-play mr-1"></i> Watch Now</p>
+                        </div>
+                    </div>
+
+                    <!-- Reading Lounge -->
+                    <div class="menu-card rounded-xl p-6 relative overflow-hidden group cursor-pointer h-64">
+                        <div class="absolute inset-0 bg-blue-900/20"></div>
+                        <div class="relative z-10">
+                            <i class="fas fa-book-open text-3xl text-gold mb-4"></i>
+                            <h3 class="text-xl font-bold text-white">閱讀室</h3>
+                            <p class="text-gray-400 text-sm mt-2">領頭羊讀書會</p>
+                            <p class="text-gray-500 text-xs mt-1">電子書庫已連線</p>
+                        </div>
+                    </div>
+
+                    <!-- Music -->
+                    <div class="menu-card rounded-xl p-6 relative overflow-hidden group cursor-pointer h-64">
+                        <div class="absolute inset-0 bg-purple-900/20"></div>
+                        <div class="relative z-10">
+                            <i class="fas fa-music text-3xl text-gold mb-4"></i>
+                            <h3 class="text-xl font-bold text-white">原創音樂</h3>
+                            <p class="text-gray-400 text-sm mt-2">詩篇23篇 同行</p>
+                            <p class="text-gray-400 text-sm">在你愛裡 Senai</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Window View Section -->
+                <div class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-10 fade-in-section">
+                    <!-- Right Window: Dragon Boat (Video) -->
+                    <div class="text-center">
+                        <p class="text-gray-400 mb-4 text-sm"><i class="fas fa-arrow-right"></i> 請看右側窗外 (Right Window)
+                        </p>
+                        <div class="window-frame h-64 w-48 mx-auto relative group">
+                            <!-- Video Element -->
+                            <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+                                <!-- 這裡使用了示範影片 (河流/水面)，請將 src 換成您的龍舟影片連結 -->
+                                <source src="https://videos.pexels.com/video-files/3205624/3205624-sd_640_360_30fps.mp4"
+                                    type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+
+                            <!-- Overlay Gradient for text readability -->
+                            <div
+                                class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300 pointer-events-none">
+                            </div>
+
+                            <!-- Caption -->
+                            <div
+                                class="absolute bottom-4 left-0 right-0 text-white text-xs font-bold shadow-black drop-shadow-md z-10">
+                                安平龍舟賽</div>
+                        </div>
+                    </div>
+
+                    <!-- Left Window: Rainbow -->
+                    <div class="text-center">
+                        <p class="text-gray-400 mb-4 text-sm"><i class="fas fa-arrow-left"></i> 請看左側窗外 (Left Window)</p>
+                        <div class="window-frame h-64 w-48 mx-auto bg-cover bg-center relative group"
+                            style="background-image: url('https://images.unsplash.com/photo-1502625206263-12542e882329?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80');">
+                            <!-- Overlay Content -->
+                            <div
+                                class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                <span class="text-white text-sm font-bold px-2">孩要來 Big Day<br>彩虹 Party</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Turbulence & Safety (Courses) -->
+        <section class="py-24 bg-[#2b0000] relative" id="turbulence-section">
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <div class="mb-12 fade-in-section">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4 animate-pulse"></i>
+                    <h2 class="text-3xl font-serif text-white mb-4 glitch-effect">您是否正經歷生命中的亂流？</h2>
+                    <p class="text-red-200">機長廣播：亂流是飛行的一部分，也是生命的一部分。</p>
+                </div>
+
+                <div
+                    class="max-w-3xl mx-auto bg-black/40 border border-red-900/50 p-8 rounded-xl backdrop-blur-md fade-in-section">
+                    <h3 class="text-xl text-white mb-6 border-b border-white/10 pb-4">安全導航系統 (Safety & Equipment)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-red-900/50 p-3 rounded text-white"><i class="fas fa-life-ring"></i></div>
+                            <div>
+                                <h4 class="text-white font-bold">幸福小組</h4>
+                                <p class="text-gray-400 text-sm">關係連結，愛的群體。</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-red-900/50 p-3 rounded text-white"><i class="fas fa-bible"></i></div>
+                            <div>
+                                <h4 class="text-white font-bold">門徒訓練</h4>
+                                <p class="text-gray-400 text-sm">扎根真理，生命建造。</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-red-900/50 p-3 rounded text-white"><i class="fas fa-child"></i></div>
+                            <div>
+                                <h4 class="text-white font-bold">幸福教養</h4>
+                                <p class="text-gray-400 text-sm">兩代合一，家庭蒙福。</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-red-900/50 p-3 rounded text-white"><i class="fas fa-star"></i></div>
+                            <div>
+                                <h4 class="text-white font-bold">生命見證</h4>
+                                <p class="text-gray-400 text-sm">雲彩般的見證人圍繞。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NEW: Gemini Powered Feature -->
+                    <div class="mt-8 border-t border-red-900/30 pt-6">
+                        <h4 class="text-gold font-serif text-lg mb-2">✨ 屬靈氣象預報 (Spiritual Forecast)</h4>
+                        <p class="text-gray-400 text-sm mb-4">輸入您目前擔憂的「亂流」，讓系統為您計算最佳飛行航道。</p>
+                        <div class="relative">
+                            <input type="text" id="turbulenceInput" class="turbulence-input"
+                                placeholder="例如：工作壓力很大、不知道未來方向...">
+                            <button onclick="analyzeTurbulence()"
+                                class="absolute right-2 top-2 mt-2 bg-red-900 text-white px-4 py-1 rounded text-xs hover:bg-red-800 transition-colors">
+                                分析航道 ✨
+                            </button>
+                        </div>
+                        <div id="turbulenceResult" class="turbulence-result">
+                            <div id="turbulenceContent" class="text-gray-200 text-sm leading-relaxed"></div>
+                        </div>
+                    </div>
+
+                    <p class="mt-8 text-gold text-sm italic">「本航班配備最穩固的導航系統，助您校準方向。」</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: In-Flight Meal -->
+        <section class="py-24 bg-[#1a1a1a]">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 fade-in-section">
+                    <h2 class="text-3xl font-serif text-white mb-2">機上餐飲服務</h2>
+                    <p class="text-gold tracking-widest text-sm uppercase">Star Michelin Service</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 fade-in-section">
+                    <!-- Menu Item 1 -->
+                    <div class="menu-card rounded-lg p-6 text-center">
+                        <div
+                            class="w-24 h-24 mx-auto bg-gray-700 rounded-full mb-4 overflow-hidden border-2 border-gold">
+                            <img src="https://images.unsplash.com/photo-1599863261234-a6949247d77f?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+                                alt="Turkey" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-white font-bold mb-1">火雞大餐</h3>
+                        <p class="text-gold text-xs">Church Love Feast</p>
+                    </div>
+
+                    <!-- Menu Item 2 -->
+                    <div class="menu-card rounded-lg p-6 text-center">
+                        <div
+                            class="w-24 h-24 mx-auto bg-gray-700 rounded-full mb-4 overflow-hidden border-2 border-gold">
+                            <img src="https://images.unsplash.com/photo-1563245372-f21724e3a80d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+                                alt="Dim Sum" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-white font-bold mb-1">港式點心</h3>
+                        <p class="text-gold text-xs">雅歌小組 特選</p>
+                    </div>
+
+                    <!-- Menu Item 3 -->
+                    <div class="menu-card rounded-lg p-6 text-center">
+                        <div
+                            class="w-24 h-24 mx-auto bg-gray-700 rounded-full mb-4 overflow-hidden border-2 border-gold">
+                            <img src="https://images.unsplash.com/photo-1580651315530-69c8e0026377?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+                                alt="Korean" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-white font-bold mb-1">韓式料理</h3>
+                        <p class="text-gold text-xs">得勝小組 供應</p>
+                    </div>
+
+                    <!-- Menu Item 4 -->
+                    <div class="menu-card rounded-lg p-6 text-center">
+                        <div
+                            class="w-24 h-24 mx-auto bg-gray-700 rounded-full mb-4 overflow-hidden border-2 border-gold">
+                            <img src="https://images.unsplash.com/photo-1623821734538-409192415d86?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
+                                alt="Pastry" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="text-white font-bold mb-1">節慶特選</h3>
+                        <p class="text-gold text-xs">蛋黃酥 & 粽子</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: 20th Anniversary Video Voting -->
+        <section class="py-24 bg-gradient-to-b from-[#1a1a1a] to-black relative overflow-hidden">
+            <!-- Background Decoration -->
+            <div class="absolute top-0 left-0 w-96 h-96 bg-gold opacity-5 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 w-96 h-96 bg-gold opacity-5 rounded-full blur-3xl"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-12 fade-in-section">
+                    <i class="fas fa-video text-gold text-4xl mb-4"></i>
+                    <h2 class="text-4xl font-serif text-white mb-4">20週年影片票選活動</h2>
+                    <p class="text-gray-400 text-lg mb-2">Anniversary Video Voting</p>
+                    <p class="text-gray-500 text-sm">選出您最喜愛的 20 週年紀念影片</p>
+                </div>
+
+                <!-- Voting CTA Card -->
+                <div
+                    class="max-w-4xl mx-auto bg-black/40 backdrop-blur-md border-2 border-gold/50 rounded-2xl p-12 shadow-[0_0_50px_rgba(190,158,105,0.3)] hover:shadow-[0_0_80px_rgba(190,158,105,0.5)] transition-all duration-500 fade-in-section">
+                    <div class="text-center">
+                        <div class="mb-8">
+                            <div class="inline-block bg-gold/10 rounded-full p-6 mb-6">
+                                <i class="fas fa-ticket-alt text-gold text-5xl"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-white mb-4">您的一票，決定榮耀時刻</h3>
+                            <p class="text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto">
+                                感謝神帶領我們走過 20 年的恩典之路。<br>
+                                現在，邀請您一同參與，為最觸動您心的影片投下神聖的一票！
+                            </p>
+                        </div>
+
+                        <!-- Top 3 Videos Display -->
+                        <div id="top-videos-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                            <!-- Loading State -->
+                            <div class="col-span-3 text-center py-8">
+                                <i class="fas fa-spinner fa-spin text-gold text-3xl mb-3"></i>
+                                <p class="text-gray-400">載入熱門影片中...</p>
+                            </div>
+                        </div>
+
+                        <script>
+                            // Fetch and display top 3 videos
+                            async function loadTopVideos() {
+                                try {
+                                    const response = await fetch('/api/top-videos');
+                                    const videos = await response.json();
+
+                                    const container = document.getElementById('top-videos-container');
+
+                                    if (videos.length === 0) {
+                                        container.innerHTML = `
+                                            <div class="col-span-3 text-center py-8">
+                                                <i class="fas fa-video text-gold text-3xl mb-3"></i>
+                                                <p class="text-gray-400">目前還沒有投票記錄</p>
+                                                <p class="text-gray-500 text-sm mt-2">成為第一個投票的人！</p>
+                                            </div>
+                                        `;
+                                        return;
+                                    }
+
+                                    // Display top 3 videos
+                                    container.innerHTML = videos.map((video, index) => {
+                                        const medals = ['🥇', '🥈', '🥉'];
+                                        const borderColors = ['border-yellow-500', 'border-gray-400', 'border-orange-600'];
+                                        const glowColors = [
+                                            'shadow-[0_0_20px_rgba(234,179,8,0.3)]',
+                                            'shadow-[0_0_20px_rgba(156,163,175,0.3)]',
+                                            'shadow-[0_0_20px_rgba(234,88,12,0.3)]'
+                                        ];
+
+                                        return `
+                                            <a href="/vote" class="block group">
+                                                <div class="bg-gray-900/50 rounded-xl overflow-hidden border-2 ${borderColors[index]} ${glowColors[index]} hover:scale-105 transition-all duration-300 cursor-pointer">
+                                                    <!-- Rank Badge -->
+                                                    <div class="relative">
+                                                        <div class="absolute top-3 left-3 z-10 bg-black/80 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center text-2xl border-2 ${borderColors[index]}">
+                                                            ${medals[index]}
+                                                        </div>
+                                                        <!-- YouTube Thumbnail -->
+                                                        <img src="https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg" 
+                                                             alt="${video.title}"
+                                                             class="w-full h-48 object-cover group-hover:opacity-80 transition-opacity"
+                                                             onerror="this.src='https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg'">
+                                                        <!-- Play Overlay -->
+                                                        <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-colors">
+                                                            <i class="fas fa-play-circle text-white text-5xl opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all"></i>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!-- Video Info -->
+                                                    <div class="p-4">
+                                                        <h4 class="text-white font-bold mb-2 line-clamp-2 group-hover:text-gold transition-colors">
+                                                            ${video.title}
+                                                        </h4>
+                                                        <div class="flex items-center justify-between text-sm">
+                                                            <span class="text-gray-400">
+                                                                <i class="fas fa-chart-bar mr-1"></i>
+                                                                ${video.votes} 票
+                                                            </span>
+                                                            <span class="text-gold font-semibold">
+                                                                第 ${index + 1} 名
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        `;
+                                    }).join('');
+
+                                } catch (error) {
+                                    console.error('Error loading top videos:', error);
+                                    document.getElementById('top-videos-container').innerHTML = `
+                                        <div class="col-span-3 text-center py-8">
+                                            <i class="fas fa-exclamation-triangle text-red-500 text-3xl mb-3"></i>
+                                            <p class="text-gray-400">載入失敗，請稍後再試</p>
+                                        </div>
+                                    `;
+                                }
+                            }
+
+                            // Load videos when page loads
+                            if (document.readyState === 'loading') {
+                                document.addEventListener('DOMContentLoaded', loadTopVideos);
+                            } else {
+                                loadTopVideos();
+                            }
+                        </script>
+                        <a href="/vote" class="inline-block group">
+                            <button
+                                class="px-12 py-5 bg-gradient-to-r from-gold to-[#d4af7a] hover:from-[#d4af7a] hover:to-gold text-black font-bold text-xl rounded-xl shadow-[0_0_30px_rgba(190,158,105,0.4)] hover:shadow-[0_0_50px_rgba(190,158,105,0.8)] transition-all duration-300 transform hover:scale-105 active:scale-95">
+                                <i class="fas fa-plane-departure mr-3"></i>
+                                立即前往投票
+                                <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i>
+                            </button>
+                        </a>
+
+                        <p class="text-gray-500 text-sm mt-6">
+                            <i class="fas fa-clock mr-2"></i>
+                            投票活動進行中 | 每人每部影片限投一票
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Decorative Elements -->
+                <div class="mt-16 text-center">
+                    <div class="inline-flex items-center gap-4 text-gray-600 text-sm">
+                        <span class="w-16 h-[1px] bg-gray-800"></span>
+                        <i class="fas fa-star text-gold"></i>
+                        <span>20 Years of Grace</span>
+                        <i class="fas fa-star text-gold"></i>
+                        <span class="w-16 h-[1px] bg-gray-800"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Arrival -->
+        <footer class="bg-black py-20 border-t border-gray-900 text-center relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+                <i class="fas fa-plane-arrival text-[20rem] text-white transform -rotate-12"></i>
+            </div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <i class="fas fa-broadcast-tower text-gold text-2xl mb-6"></i>
+                <h2 class="text-4xl font-serif text-white mb-6">Welcome to 2026</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+                    <!-- Removed trailing period -->
+                    「這20年來無論順風、逆風，或亂流，或是曾經偏離航道，<br>
+                    經過了時間的推移，我們憑飛越翱翔，靠神的恩典飛行」
+                </p>
+
+                <div class="inline-block border border-gold px-8 py-4 rounded mt-8">
+                    <p class="text-gold uppercase tracking-[0.2em] text-sm">Mission Continues</p>
+                </div>
+
+                <div class="mt-16 text-xs text-gray-600">
+                    &copy; 2026 ALL Airlines (Anping Ling Liang Tang). All rights reserved.<br>
+                    Designed with <i class="fas fa-heart text-red-900"></i> by Galactic Grace.
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <div class="chat-button" onclick="toggleChat()">
+            <i class="fas fa-headset text-2xl"></i>
+        </div>
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <span class="text-gold font-bold"><i class="fas fa-robot mr-2"></i>ALL 智能空服員 ✨</span>
+            <button onclick="toggleChat()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                各位旅客您好，我是本航班的 AI 空服員。無論是查詢安平靈糧堂歷史，或是需要屬靈支持，都歡迎告訴我。✨
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" class="w-full bg-transparent text-white border-none focus:ring-0 text-sm"
+                placeholder="輸入訊息... (Enter發送)">
+            <button onclick="handleChat()" class="text-gold"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Cursor Follower Plane (New Feature) -->
+    <div id="cursor-plane"
+        class="fixed pointer-events-none z-[9999] text-gold text-2xl drop-shadow-[0_0_10px_rgba(190,158,105,0.8)] opacity-0 transition-opacity duration-300"
+        style="top: 0; left: 0;">
+        <!-- Cursor Follower Plane (REMOVED as per request) -->
+        <!-- Code removed -->
+
+        <script type="module">
+            import { GoogleGenerativeAI } from "@google/generative-ai";
+
+            // Initialize Gemini API
+            const apiKey = ""; // System will provide API key
+            const genAI = new GoogleGenerativeAI(apiKey);
+            const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-preview-09-2025" });
+
+            // --- Feature 1: Chat Bot ---
+            window.toggleChat = function () {
+                document.getElementById('chatWindow').classList.toggle('open');
+            }
+
+            window.handleChat = async function () {
+                const input = document.getElementById('chatInput');
+                const messagesDiv = document.getElementById('chatMessages');
+                const userText = input.value.trim();
+
+                if (!userText) return;
+
+                // Add User Message
+                messagesDiv.innerHTML += `<div class="message user">${userText}</div>`;
+                input.value = '';
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+                // Loading state
+                const loadingId = 'loading-' + Date.now();
+                messagesDiv.innerHTML += `<div class="message bot" id="${loadingId}"><i class="fas fa-circle-notch fa-spin text-gold"></i> 連線中...</div>`;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+                try {
+                    const prompt = `
+                    You are a warm, professional, and spiritual Flight Attendant for Anping Ling Liang Tang Airlines (ALL Airlines) on its 20th Anniversary Flight (2006-2026). 
+                    Flight Number: 777. 
+                    Context: 
+                    - 2001: Canal Outreach. 
+                    - 2015: Planted Annan Gospel Center. 
+                    - 2021: New building at 77 Fuping Rd opened.
+                    - Tone: Use airline metaphors (flight path, cruising altitude, turbulence, seatbelt of truth).
+                    - Goal: Answer questions about the church history or offer short biblical encouragement/prayer based on user input.
+                    - Language: Traditional Chinese (zh-TW).
+                    
+                    User: ${userText}
+                `;
+
+                    const result = await model.generateContent(prompt);
+                    const response = result.response.text();
+
+                    document.getElementById(loadingId).innerText = response;
+                } catch (error) {
+                    document.getElementById(loadingId).innerText = "系統繁忙，請稍後再試。";
+                    console.error(error);
+                }
+            }
+
+            // Allow Enter key to send
+            document.getElementById('chatInput').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') window.handleChat();
+            });
+
+
+            // --- Feature 2: Turbulence Analyzer ---
+            window.analyzeTurbulence = async function () {
+                const input = document.getElementById('turbulenceInput');
+                const resultDiv = document.getElementById('turbulenceResult');
+                const contentDiv = document.getElementById('turbulenceContent');
+                const worry = input.value.trim();
+
+                if (!worry) {
+                    alert("請輸入您目前遇到的狀況");
+                    return;
+                }
+
+                contentDiv.innerHTML = '<i class="fas fa-circle-notch fa-spin text-gold"></i> 正在計算最佳航道...';
+                resultDiv.style.display = 'block';
+
+                try {
+                    const prompt = `
+                    User is experiencing life turbulence: "${worry}".
+                    As a Spiritual Flight Captain, generate a short "Flight Path Correction Plan" in Traditional Chinese.
+                    Include:
+                    1. A comforting airline-style announcement (e.g., "We are adjusting altitude to avoid this storm").
+                    2. One specific Bible verse (Scripture) suitable for this situation.
+                    3. A short 1-sentence prayer.
+                `;
+
+                    const result = await model.generateContent(prompt);
+                    const response = result.response.text();
+
+                    contentDiv.innerText = response;
+                } catch (error) {
+                    contentDiv.innerText = "導航系統連線中斷，請稍後再試。";
+                }
+            }
+        </script>
+
+        <script>
+            // Check-in Interaction (Existing)
+            function startJourney() {
+                const screen = document.getElementById('loading-screen');
+                screen.style.opacity = '0';
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                    console.log("Audio: [機場廣播聲]");
+                }, 800);
+            }
+
+            // Scroll Animation Observer (Existing)
+            document.addEventListener('DOMContentLoaded', () => {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.1
+                };
+
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.fade-in-section').forEach(section => {
+                    observer.observe(section);
+                });
+            });
+
+            // --- NEW: Timeline Plane Scroll Logic ---
+            // Keeps the plane moving along the vertical line based on scroll
+            const timelineContainer = document.getElementById('timeline-container');
+            const timelinePlane = document.getElementById('timeline-plane');
+
+            if (timelineContainer && timelinePlane) {
+                // 1. Scroll Listener (updates plane position)
+                window.addEventListener('scroll', () => {
+                    const rect = timelineContainer.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+                    const containerHeight = timelineContainer.offsetHeight;
+
+                    // Calculate progress based on viewport center
+                    let progress = (windowHeight / 2 - rect.top) / containerHeight;
+
+                    // Clamp progress
+                    if (progress < 0) progress = 0;
+                    if (progress > 1) progress = 1;
+
+                    const planeY = progress * (containerHeight - 40);
+
+                    // Update Position (Keep strictly vertical nose-down)
+                    timelinePlane.style.top = `${planeY}px`;
+                });
+
+                // 2. Click Interaction for Dots
+                document.querySelectorAll('.timeline-dot').forEach(dot => {
+                    // Add cursor pointer style
+                    dot.style.cursor = 'pointer';
+
+                    // Add click listener
+                    dot.addEventListener('click', function (e) {
+                        // Find the parent section (group)
+                        const section = this.closest('.group');
+                        if (section) {
+                            // Smoothly scroll the section to the center of the screen
+                            // This will naturally trigger the scroll listener above, making the plane fly to it
+                            section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    });
+                });
+            }
+        </script>
+</body>
+
+</html>
