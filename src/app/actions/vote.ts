@@ -1,6 +1,7 @@
 'use server';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabaseClient';
 import { cookies } from 'next/headers';
+
 
 export async function submitVote(videoId: number) {
     try {
