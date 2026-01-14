@@ -12,10 +12,10 @@ interface Video {
 
 export default function VotePage() {
     const [videos, setVideos] = useState<Video[]>([
-        { id: 1, title: '20週年紀念影片 1', youtube_id: '9_qNJyZR3sI' },
-        { id: 2, title: '20週年紀念影片 2', youtube_id: 'g7sZsHg05kw' },
-        { id: 3, title: '20週年紀念影片 3', youtube_id: 'C6rLXGCrejg' },
-        { id: 4, title: '20週年紀念影片 4', youtube_id: 'Qc7sxKQgfLo' }
+        { id: 1, title: '第一個影片', youtube_id: '9_qNJyZR3sI' },
+        { id: 2, title: '第二個影片', youtube_id: 'g7sZsHg05kw' },
+        { id: 3, title: '第三個影片', youtube_id: 'C6rLXGCrejg' },
+        { id: 4, title: '第四個影片', youtube_id: 'Qc7sxKQgfLo' }
     ]);
     const [voteStats, setVoteStats] = useState<any[]>([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);

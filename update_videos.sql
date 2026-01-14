@@ -9,10 +9,10 @@ DELETE FROM videos;
 
 -- 3. 插入新影片
 INSERT INTO videos (id, title, youtube_id) VALUES
-  (1, '20週年紀念影片 1', '9_qNJyZR3sI'),
-  (2, '20週年紀念影片 2', 'g7sZsHg05kw'),
-  (3, '20週年紀念影片 3', 'C6rLXGCrejg'),
-  (4, '20週年紀念影片 4', 'Qc7sxKQgfLo');
+  (1, '第一個影片', '9_qNJyZR3sI'),
+  (2, '第二個影片', 'g7sZsHg05kw'),
+  (3, '第三個影片', 'C6rLXGCrejg'),
+  (4, '第四個影片', 'Qc7sxKQgfLo');
 
 -- 4. 驗證資料
 SELECT * FROM videos ORDER BY id;
