@@ -227,6 +227,9 @@ export default function VotePage() {
                     )}
                 </div>
 
+                {/* Leaderboard */}
+                <Leaderboard stats={voteStats} />
+
                 {/* Videos Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                     {videos.map((video) => (
@@ -238,9 +241,6 @@ export default function VotePage() {
                         />
                     ))}
                 </div>
-
-                {/* Leaderboard */}
-                <Leaderboard stats={voteStats} />
 
                 {/* Footer */}
                 <footer className="text-center mt-12 text-gray-500">
