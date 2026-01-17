@@ -37,6 +37,15 @@ export async function submitVote(videoId: number) {
             };
         }
 
+        // 檢查今天是否已經投過這部特定的影片
+        const hasVotedForThisVideo = todayVotes?.some(v => v.video_id === videoId);
+        if (hasVotedForThisVideo) {
+            return {
+                success: false,
+                message: '您今天已經投過這部影片了！請投給其他不同的影片 📹'
+            };
+        }
+
         // 新增投票記錄（包含 vote_date）
         const { error } = await supabase
             .from('votes')

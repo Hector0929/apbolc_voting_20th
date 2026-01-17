@@ -12,10 +12,36 @@ interface Video {
 
 export default function VotePage() {
     const [videos, setVideos] = useState<Video[]>([
-        { id: 1, title: '第一個影片', youtube_id: '9_qNJyZR3sI' },
-        { id: 2, title: '第二個影片', youtube_id: 'g7sZsHg05kw' },
-        { id: 3, title: '第三個影片', youtube_id: 'C6rLXGCrejg' },
-        { id: 4, title: '第四個影片', youtube_id: 'Qc7sxKQgfLo' }
+        { id: 1, title: '01 讚美小組 祝福安平靈糧堂20週年', youtube_id: 'I56goHmk9d8' },
+        { id: 2, title: '02 橄欖樹 祝福安平靈糧堂20週年', youtube_id: 'ngyXLZZjCWs' },
+        { id: 3, title: '03 五餅二魚小組 祝福安平靈糧堂20週年', youtube_id: 'Bc4fLH0J2zc' },
+        { id: 4, title: '04 天使心第一小組 祝福安平靈糧堂20週年V', youtube_id: 'LHUXIqfqacc' },
+        { id: 5, title: '05 巴底買小組 祝福安平靈糧堂20週年', youtube_id: 'dQ7C7QHn6Mg' },
+        { id: 6, title: '06 以勒 祝福安平靈糧堂20週年', youtube_id: 'GdcCenmeQ58' },
+        { id: 7, title: '07 光鹽小組 祝福安平靈糧堂20週年', youtube_id: '2vHoaP1XgnY' },
+        { id: 8, title: '08 何其美小組 祝福安平靈糧堂20週年', youtube_id: 'WD89-THw45w' },
+        { id: 9, title: '09 佳美小組 祝福安平靈糧堂20週年', youtube_id: 'o3XeoFhyIKc' },
+        { id: 10, title: '10 房角石小組 祝福安平靈糧堂20週年', youtube_id: 'L-dr_MlWa5g' },
+        { id: 11, title: '11 約書亞小組 祝福安平靈糧堂20週年', youtube_id: 'FOCv1m6TGkY' },
+        { id: 12, title: '12 美福小組 祝福安平靈糧堂20週年', youtube_id: 'O7CzwEagyhU' },
+        { id: 13, title: '13 迦南小組 祝福安平靈糧堂20週年', youtube_id: 'PyaS4N7Monw' },
+        { id: 14, title: '14 恩愛小組 祝福安平靈糧堂20週年', youtube_id: 'PWw3egLSVrw' },
+        { id: 15, title: '15 得勝小組 祝福安平靈糧堂20週年', youtube_id: 'StHkhmA8o-4' },
+        { id: 16, title: '16 喜樂 祝福安平靈糧堂20週年', youtube_id: 'BE7cUOzm2nY' },
+        { id: 17, title: '17 雅歌小組 祝福安平靈糧堂20週年', youtube_id: 'yNWDYtN1niA' },
+        { id: 18, title: '18 雲柱小組 祝福安平靈糧堂20週年', youtube_id: 'uXRW5xPZcss' },
+        { id: 19, title: '19 溪邊小組 祝福安平靈糧堂20週年', youtube_id: 'INv5yWxFQK0' },
+        { id: 20, title: '20 跨越小組 祝福安平靈糧堂20週年', youtube_id: 'tR2r9O1CaIc' },
+        { id: 21, title: '21 撒拉弗小組 祝福安平靈糧堂20週年', youtube_id: 'KH1Ik3AEzF0' },
+        { id: 22, title: '22 磐石小組 祝福安平靈糧堂20週年', youtube_id: 'bUKz_FewoF8' },
+        { id: 23, title: '23 小孩第一小組 祝福安平靈糧堂20週年', youtube_id: 'EfSpifuHqeY' },
+        { id: 24, title: '24 宇光小組 祝福安平靈糧堂20週年', youtube_id: '5phkp3DED4g' },
+        { id: 25, title: '25 迦勒小組 祝福安平靈糧堂20週年', youtube_id: 'permReG7XTk' },
+        { id: 26, title: '26 營火小組 祝福安平靈糧堂20週年V', youtube_id: 'zl9NuViXg7o' },
+        { id: 27, title: '27 SQUAT小組 祝福安平靈糧堂20週年', youtube_id: 'iz3x3rzUwHI' },
+        { id: 28, title: '28 唯光小組 祝福安平靈糧堂20週年 V', youtube_id: 'QJrgrTL20NU' },
+        { id: 29, title: '29 以斯帖小組 祝福安平靈糧堂20週年', youtube_id: 'nVcbnRRHGBU' },
+        { id: 30, title: '30 冠冕小組小組 祝福安平靈糧堂20週年', youtube_id: 'C6jmaURPYGw' }
     ]);
     const [voteStats, setVoteStats] = useState<any[]>([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
