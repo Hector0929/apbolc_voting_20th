@@ -74,7 +74,8 @@ export async function getVoteStats() {
         const { data, error } = await supabase
             .from('votes')
             .select('video_id, videos(title, youtube_id)')
-            .order('video_id');
+            .order('video_id')
+            .range(0, 9999); // 移除 Supabase 預設的 1000 筆限制
 
         if (error) throw error;
 
