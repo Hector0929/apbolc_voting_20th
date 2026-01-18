@@ -78,16 +78,21 @@ export async function getVoteStats() {
 
         if (error) throw error;
 
-        // 統計每個影片的票數
+        // 統計每個影片的票數（包含沒有影片資料的投票）
         const stats = data.reduce((acc: any, vote: any) => {
             const videoId = vote.video_id;
             if (!acc[videoId]) {
                 acc[videoId] = {
                     id: videoId,
-                    title: vote.videos?.title || '',
+                    title: vote.videos?.title || `未知影片 #${videoId}`,
                     youtube_id: vote.videos?.youtube_id || '',
                     votes: 0
                 };
+
+                // 記錄孤兒投票以便追蹤
+                if (!vote.videos) {
+                    console.warn(`發現孤兒投票: video_id ${videoId} 不存在於 videos 表中`);
+                }
             }
             acc[videoId].votes += 1;
             return acc;
