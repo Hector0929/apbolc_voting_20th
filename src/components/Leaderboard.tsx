@@ -49,7 +49,7 @@ export default function Leaderboard({ stats }: LeaderboardProps) {
         );
     }
 
-    const sortedStats = [...stats].sort((a, b) => b.votes - a.votes);
+    const sortedStats = [...stats].sort((a, b) => b.votes - a.votes).slice(0, 5);
 
     const chartData = {
         labels: sortedStats.map(s => s.title),
