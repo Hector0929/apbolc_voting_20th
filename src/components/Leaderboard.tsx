@@ -49,14 +49,15 @@ export default function Leaderboard({ stats }: LeaderboardProps) {
         );
     }
 
-    const sortedStats = [...stats].sort((a, b) => b.votes - a.votes).slice(0, 5);
+    const sortedStats = [...stats].sort((a, b) => b.votes - a.votes);
+    const top5Stats = sortedStats.slice(0, 5); // 圖表只顯示前 5 名
 
     const chartData = {
-        labels: sortedStats.map(s => s.title),
+        labels: top5Stats.map(s => s.title),
         datasets: [
             {
                 label: '票數',
-                data: sortedStats.map(s => s.votes),
+                data: top5Stats.map(s => s.votes),
                 backgroundColor: [
                     'rgba(190, 158, 105, 0.8)',  // gold
                     'rgba(139, 115, 85, 0.8)',   // darker gold
