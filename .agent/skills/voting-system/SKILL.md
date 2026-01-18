@@ -213,23 +213,52 @@ export async function submitVote(videoId: number) {
 
 export async function getVoteStats() {
     try {
-        const { data, error } = await supabase
-            .from('votes')
-            .select('video_id, videos(title, youtube_id)')
-            .order('video_id');
+        let allVotes: any[] = [];
+        let from = 0;
+        const pageSize = 1000;
+        let hasMore = true;
 
-        if (error) throw error;
+        // ⚠️ CRITICAL: Supabase limits queries to 1000 records by default
+        // Use pagination loop to fetch ALL votes
+        while (hasMore) {
+            const { data, error } = await supabase
+                .from('votes')
+                .select('video_id, videos(title, youtube_id)')
+                .order('video_id')
+                .range(from, from + pageSize - 1);
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                allVotes = allVotes.concat(data);
+                from += pageSize;
+                
+                // If we got less than pageSize, we've reached the last page
+                if (data.length < pageSize) {
+                    hasMore = false;
+                }
+            } else {
+                hasMore = false;
+            }
+        }
+
+        console.log(`✅ getVoteStats: Retrieved ${allVotes.length} vote records`);
 
         // Aggregate vote counts
-        const stats = data.reduce((acc: any, vote: any) => {
+        const stats = allVotes.reduce((acc: any, vote: any) => {
             const videoId = vote.video_id;
             if (!acc[videoId]) {
                 acc[videoId] = {
                     id: videoId,
-                    title: vote.videos?.title || '',
+                    title: vote.videos?.title || `Unknown Video #${videoId}`,
                     youtube_id: vote.videos?.youtube_id || '',
                     votes: 0
                 };
+                
+                // Log orphan votes for tracking
+                if (!vote.videos) {
+                    console.warn(`Found orphan vote: video_id ${videoId} not in videos table`);
+                }
             }
             acc[videoId].votes += 1;
             return acc;
@@ -454,6 +483,60 @@ CREATE POLICY "Allow public insert"
 ON votes FOR INSERT TO public WITH CHECK (true);
 ```
 
+### 9.5 ⚠️ CRITICAL: Supabase 1000-Record Query Limit
+
+**Problem:** Vote counts become inaccurate when total votes exceed 1000
+
+**Symptoms:**
+- Leaderboard shows lower vote counts than database
+- High-vote videos missing from rankings
+- Problem appears suddenly when crossing 1000 total votes
+
+**Root Cause:**
+Supabase JavaScript Client has a **default limit of 1000 records per query**. When your votes table exceeds 1000 rows:
+- Single queries only return first 1000 records
+- Vote statistics become incomplete
+- No error is thrown - data is silently truncated
+
+**Solution:** Implement pagination loop (already included in code above)
+
+```typescript
+let allVotes: any[] = [];
+let from = 0;
+const pageSize = 1000;
+let hasMore = true;
+
+while (hasMore) {
+    const { data, error } = await supabase
+        .from('votes')
+        .select('...')
+        .range(from, from + pageSize - 1);
+    
+    if (data && data.length > 0) {
+        allVotes = allVotes.concat(data);
+        from += pageSize;
+        if (data.length < pageSize) hasMore = false;
+    } else {
+        hasMore = false;
+    }
+}
+```
+
+**When to worry:**
+- ✅ < 1000 votes: No action needed
+- ⚠️ 800-1000 votes: Monitor closely
+- 🚨 > 1000 votes: Pagination is REQUIRED
+
+**Performance Impact:**
+- 2000 votes: 2 queries (~400ms)
+- 5000 votes: 5 queries (~1s)
+- 10000 votes: 10 queries (~2s)
+
+**Future Optimization (>10,000 votes):**
+- Implement caching (refresh every 5 minutes)
+- Use Supabase RPC/PostgreSQL Functions
+- Pre-calculate statistics in background job
+
 ---
 
 ## Part 10: Testing Checklist
@@ -513,8 +596,17 @@ This skill provides a complete, production-ready voting system with:
 - Modern tech stack (Next.js 16 + Supabase)
 - Daily vote limits with timezone handling
 - Simple authentication
-- Real-time leaderboard
+- Real-time leaderboard with pagination support
 - Professional UI/UX
 - Vercel deployment
+- **Scalable to 10,000+ votes** with pagination
 
 Perfect for church events, community voting, or any scenario requiring daily vote limits.
+
+## ⚠️ Critical Reminders
+
+1. **Supabase Query Limit**: Always use pagination when vote count may exceed 1000
+2. **Timezone**: Use `Asia/Taipei` (or your timezone) consistently
+3. **RLS Policies**: Ensure public read/insert access is enabled
+4. **Environment Variables**: Set in both local `.env.local` and Vercel dashboard
+5. **Testing**: Test with >1000 records to verify pagination works
