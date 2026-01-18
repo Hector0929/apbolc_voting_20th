@@ -71,16 +71,38 @@ export async function submitVote(videoId: number) {
 
 export async function getVoteStats() {
     try {
-        const { data, error } = await supabase
-            .from('votes')
-            .select('video_id, videos(title, youtube_id)')
-            .order('video_id')
-            .range(0, 9999); // 移除 Supabase 預設的 1000 筆限制
+        let allVotes: any[] = [];
+        let from = 0;
+        const pageSize = 1000;
+        let hasMore = true;
 
-        if (error) throw error;
+        // 分頁取得所有投票記錄
+        while (hasMore) {
+            const { data, error } = await supabase
+                .from('votes')
+                .select('video_id, videos(title, youtube_id)')
+                .order('video_id')
+                .range(from, from + pageSize - 1);
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                allVotes = allVotes.concat(data);
+                from += pageSize;
+
+                // 如果這次取得的記錄少於 pageSize，表示已經是最後一頁
+                if (data.length < pageSize) {
+                    hasMore = false;
+                }
+            } else {
+                hasMore = false;
+            }
+        }
+
+        console.log(`✅ getVoteStats: 成功取得 ${allVotes.length} 筆投票記錄`);
 
         // 統計每個影片的票數（包含沒有影片資料的投票）
-        const stats = data.reduce((acc: any, vote: any) => {
+        const stats = allVotes.reduce((acc: any, vote: any) => {
             const videoId = vote.video_id;
             if (!acc[videoId]) {
                 acc[videoId] = {

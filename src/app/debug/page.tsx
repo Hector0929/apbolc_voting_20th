@@ -13,34 +13,79 @@ export default function DebugPage() {
     async function debugVotes() {
         const debug: any = {};
 
-        // 1. 直接查詢 votes 表（不用 JOIN）
-        const { data: allVotes, error: votesError } = await supabase
-            .from('votes')
-            .select('video_id');
+        // 1. 直接查詢 votes 表（不用 JOIN）- 使用分頁
+        let allVotes: any[] = [];
+        let from = 0;
+        const pageSize = 1000;
+        let hasMore = true;
 
-        debug.totalVotes = allVotes?.length || 0;
-        debug.votesError = votesError?.message;
+        while (hasMore) {
+            const { data, error: votesError } = await supabase
+                .from('votes')
+                .select('video_id')
+                .range(from, from + pageSize - 1);
+
+            if (votesError) {
+                debug.votesError = votesError.message;
+                break;
+            }
+
+            if (data && data.length > 0) {
+                allVotes = allVotes.concat(data);
+                from += pageSize;
+                if (data.length < pageSize) {
+                    hasMore = false;
+                }
+            } else {
+                hasMore = false;
+            }
+        }
+
+        debug.totalVotes = allVotes.length;
+        console.log(`✅ Debug: 成功取得 ${allVotes.length} 筆投票記錄`);
 
         // 2. 統計每個影片的票數（不用 JOIN）
         const voteCounts: any = {};
-        allVotes?.forEach((vote: any) => {
+        allVotes.forEach((vote: any) => {
             voteCounts[vote.video_id] = (voteCounts[vote.video_id] || 0) + 1;
         });
         debug.voteCountsNoJoin = Object.entries(voteCounts)
             .map(([id, count]) => ({ id: Number(id), count }))
             .sort((a: any, b: any) => b.count - a.count);
 
-        // 3. 使用 JOIN 查詢（模擬 getVoteStats）
-        const { data: withJoin, error: joinError } = await supabase
-            .from('votes')
-            .select('video_id, videos(title, youtube_id)');
+        // 3. 使用 JOIN 查詢（模擬 getVoteStats）- 使用分頁
+        let withJoin: any[] = [];
+        from = 0;
+        hasMore = true;
 
-        debug.withJoinCount = withJoin?.length || 0;
-        debug.joinError = joinError?.message;
+        while (hasMore) {
+            const { data, error: joinError } = await supabase
+                .from('votes')
+                .select('video_id, videos(title, youtube_id)')
+                .range(from, from + pageSize - 1);
+
+            if (joinError) {
+                debug.joinError = joinError.message;
+                break;
+            }
+
+            if (data && data.length > 0) {
+                withJoin = withJoin.concat(data);
+                from += pageSize;
+                if (data.length < pageSize) {
+                    hasMore = false;
+                }
+            } else {
+                hasMore = false;
+            }
+        }
+
+        debug.withJoinCount = withJoin.length;
+        console.log(`✅ Debug JOIN: 成功取得 ${withJoin.length} 筆記錄`);
 
         // 4. 統計 JOIN 後的結果
         const joinCounts: any = {};
-        withJoin?.forEach((vote: any) => {
+        withJoin.forEach((vote: any) => {
             const id = vote.video_id;
             joinCounts[id] = joinCounts[id] || {
                 count: 0,
@@ -66,7 +111,7 @@ export default function DebugPage() {
         // 6. 找出孤兒投票
         const videoIds = new Set(allVideos?.map(v => v.id) || []);
         const orphanVotes: any = {};
-        allVotes?.forEach((vote: any) => {
+        allVotes.forEach((vote: any) => {
             if (!videoIds.has(vote.video_id)) {
                 orphanVotes[vote.video_id] = (orphanVotes[vote.video_id] || 0) + 1;
             }

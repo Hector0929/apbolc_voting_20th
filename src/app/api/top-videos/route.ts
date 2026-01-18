@@ -4,19 +4,39 @@ import { supabase } from '@/lib/supabaseClient';
 
 export async function GET() {
     try {
-        // Fetch all votes with video information
-        const { data, error } = await supabase
-            .from('votes')
-            .select('video_id, videos(id, title, youtube_id)')
-            .order('video_id')
-            .range(0, 9999); // 移除 Supabase 預設的 1000 筆限制
+        let allVotes: any[] = [];
+        let from = 0;
+        const pageSize = 1000;
+        let hasMore = true;
 
-        if (error) throw error;
+        // 分頁取得所有投票記錄
+        while (hasMore) {
+            const { data, error } = await supabase
+                .from('votes')
+                .select('video_id, videos(id, title, youtube_id)')
+                .order('video_id')
+                .range(from, from + pageSize - 1);
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                allVotes = allVotes.concat(data);
+                from += pageSize;
+
+                if (data.length < pageSize) {
+                    hasMore = false;
+                }
+            } else {
+                hasMore = false;
+            }
+        }
+
+        console.log(`✅ top-videos API: 成功取得 ${allVotes.length} 筆投票記錄`);
 
         // Count votes for each video
         const voteCounts: { [key: number]: { id: number; title: string; youtube_id: string; votes: number } } = {};
 
-        data.forEach((vote: any) => {
+        allVotes.forEach((vote: any) => {
             const videoId = vote.video_id;
             if (!voteCounts[videoId]) {
                 voteCounts[videoId] = {
