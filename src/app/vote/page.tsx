@@ -26,7 +26,7 @@ export default function VotePage() {
         { id: 12, title: '12 美福小組 祝福安平靈糧堂20週年', youtube_id: 'O7CzwEagyhU' },
         { id: 13, title: '13 迦南小組 祝福安平靈糧堂20週年', youtube_id: 'PyaS4N7Monw' },
         { id: 14, title: '14 恩愛小組 祝福安平靈糧堂20週年', youtube_id: 'PWw3egLSVrw' },
-        { id: 15, title: '15 得勝小組 祝福安平靈糧堂20週年', youtube_id: 'StHkhmA8o-4' },
+        { id: 15, title: '15 得勝小組 祝福安平靈糧堂20週年', youtube_id: '4sN0gglRdf8' },
         { id: 16, title: '16 喜樂 祝福安平靈糧堂20週年', youtube_id: 'BE7cUOzm2nY' },
         { id: 17, title: '17 雅歌小組 祝福安平靈糧堂20週年', youtube_id: 'yNWDYtN1niA' },
         { id: 18, title: '18 雲柱小組 祝福安平靈糧堂20週年', youtube_id: 'uXRW5xPZcss' },
