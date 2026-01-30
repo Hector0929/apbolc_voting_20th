@@ -1,8 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import VideoCard from '@/components/VideoCard';
-import Leaderboard from '@/components/Leaderboard';
-import { getVoteStats, getRemainingVotes } from '../actions/vote';
+import { getRemainingVotes } from '../actions/vote';
 
 interface Video {
     id: number;
@@ -43,7 +42,6 @@ export default function VotePage() {
         { id: 29, title: '29 以斯帖小組 祝福安平靈糧堂20週年', youtube_id: 'nVcbnRRHGBU' },
         { id: 30, title: '30 冠冕小組小組 祝福安平靈糧堂20週年', youtube_id: 'C6jmaURPYGw' }
     ]);
-    const [voteStats, setVoteStats] = useState<any[]>([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userName, setUserName] = useState('');
     const [userPhone, setUserPhone] = useState('');
@@ -56,7 +54,6 @@ export default function VotePage() {
 
     useEffect(() => {
         checkLoginStatus();
-        loadVoteStats();
     }, []);
 
     useEffect(() => {
@@ -75,11 +72,6 @@ export default function VotePage() {
             setUserPhone(storedPhone);
         }
         setLoading(false);
-    };
-
-    const loadVoteStats = async () => {
-        const stats = await getVoteStats();
-        setVoteStats(stats);
     };
 
     const loadRemainingVotes = async () => {
@@ -269,9 +261,6 @@ export default function VotePage() {
                     )}
                 </div>
 
-                {/* Leaderboard */}
-                <Leaderboard stats={voteStats} />
-
                 {/* Videos Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                     {videos.map((video) => (
@@ -280,7 +269,6 @@ export default function VotePage() {
                             video={video}
                             isLoggedIn={isLoggedIn}
                             onVoteSuccess={() => {
-                                loadVoteStats();
                                 loadRemainingVotes();
                             }}
                         />

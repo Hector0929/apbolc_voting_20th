@@ -1,6 +1,6 @@
 'use server';
 import { supabase } from '@/lib/supabaseClient';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 
 export async function submitVote(videoId: number) {
@@ -38,7 +38,7 @@ export async function submitVote(videoId: number) {
         }
 
         // 檢查今天是否已經投過這部特定的影片
-        const hasVotedForThisVideo = todayVotes?.some(v => v.video_id === videoId);
+        const hasVotedForThisVideo = todayVotes?.some((v: any) => v.video_id === videoId);
         if (hasVotedForThisVideo) {
             return {
                 success: false,
@@ -46,13 +46,18 @@ export async function submitVote(videoId: number) {
             };
         }
 
-        // 新增投票記錄（包含 vote_date）
+        // Insert vote
+        // In Next.js server actions, we use headers() to get IP
+        const headersList = await headers();
+        const ipAddress = headersList.get('x-forwarded-for')?.split(',')[0] || headersList.get('x-real-ip') || 'unknown';
+
         const { error } = await supabase
             .from('votes')
             .insert({
                 user_id: userId,
                 video_id: videoId,
-                vote_date: today
+                vote_date: today,
+                ip_address: ipAddress
             });
 
         if (error) throw error;
