@@ -55,15 +55,10 @@ export default function VideoCard({ video, isLoggedIn, onVoteSuccess }: VideoCar
                 <h3 className="font-bold text-2xl mb-4 text-white line-clamp-2 group-hover:text-[#be9e69] transition-colors">{video.title}</h3>
                 <button
                     onClick={handleVote}
-                    disabled={loading || !isLoggedIn}
-                    className={`w-full py-3 rounded-xl font-bold text-lg transition-all duration-300 transform ${loading
-                        ? 'bg-gray-700 cursor-not-allowed text-gray-400'
-                        : isLoggedIn
-                            ? 'bg-gradient-to-r from-[#be9e69] to-[#d4af7a] hover:from-[#d4af7a] hover:to-[#be9e69] text-black shadow-lg hover:shadow-[0_0_20px_rgba(190,158,105,0.5)] active:scale-95'
-                            : 'bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700'
-                        }`}
+                    disabled={true}
+                    className="w-full py-3 rounded-xl font-bold text-lg transition-all duration-300 transform bg-gray-700 cursor-not-allowed text-gray-400 border border-gray-600"
                 >
-                    {loading ? '✈️ 投票處理中...' : isLoggedIn ? '🎯 投他一票' : '✈️ 請先登入'}
+                    🔒 投票已結束
                 </button>
             </div>
         </div>
